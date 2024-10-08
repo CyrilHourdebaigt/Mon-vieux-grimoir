@@ -76,7 +76,7 @@ exports.getBestRatedBooks  =  (req, res, next) => {
       .sort({ averageRating: -1 })
       .limit(3)
       .then(books => res.status(200).json(books))
-      .catch(error => res.status(404).json({ error: "Error getting best rating" }));
+      .catch(error => res.status(404).json({ error: "Erreur pour obtnenir les mieux notés" }));
   };
 
 
@@ -86,17 +86,17 @@ exports.createRating = async (req, res) => {
     const bookId = req.params.id;
   
     if (rating < 0 || rating > 5) {
-      return res.status(400).json({ message: "Please rate the book from 1 to 5" });
+      return res.status(400).json({ message: "Veuillez noter le livre de 1 à 5 !" });
     }
   
     const book = await Book.findById(bookId);
     if (!book) {
-      return res.status(404).json({ message: "Book not found" });
+      return res.status(404).json({ message: "Livre non trouvé !" });
     }
   
     const hasUserRatedBook = book.ratings.some(rating => rating.userId === userId);
     if (hasUserRatedBook) {
-      return res.status(403).json({ message: "Not authorized" });
+      return res.status(403).json({ message: "Non-autorisé" });
     }
   
     book.ratings.push({ ...req.body, grade: rating });
@@ -106,6 +106,6 @@ exports.createRating = async (req, res) => {
       await book.save();
       return res.status(201).json(book);
     } catch (error) {
-      return res.status(500).json({ error: "Error while rating the book" });
+      return res.status(500).json({ error: "Erreur lors de l'évaluation du livre !" });
     }
   };
